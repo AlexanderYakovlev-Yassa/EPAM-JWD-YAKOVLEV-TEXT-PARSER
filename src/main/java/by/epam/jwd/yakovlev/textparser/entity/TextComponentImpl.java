@@ -73,7 +73,7 @@ public class TextComponentImpl implements TextComponent {
                 res = restoreText(System.lineSeparator());
                 break;
             }
-            case DIGIT_EQUATION: {
+            case MATH_EQUATION: {
             }
             case PARAGRAPH: {
                 res = restoreText(WHITE_SPACE);

@@ -7,9 +7,8 @@ public enum TextComponentType {
     SENTENCE (TextComponentType.TOKEN),
     TOKEN (TextComponentType.WORD),
     WORD (TextComponentType.SYMBOL),
-    DIGIT_EQUATION (TextComponentType.SYMBOL),
+    MATH_EQUATION(TextComponentType.SYMBOL),
     NUMBER (TextComponentType.SYMBOL),
-    MATH_OPERATOR (TextComponentType.SYMBOL),
     SYMBOL (null);
 
     TextComponentType innerType;
