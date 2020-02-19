@@ -1,18 +1,17 @@
 package by.epam.jwd.yakovlev.textparser.entity;
 
-import by.epam.jwd.yakovlev.textparser.entity.exception.NotCompatibleType;
-
+import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 
-public class TextComponentImpl implements TextComponent {
+public class RegularTextComponent implements TextComponent {
 
     public static final String WHITE_SPACE = " ";
     public static final String EMPTY_STRING = "";
 
-    private final TextComponentType type;
+    private final TextComponentTypesEnum type;
     private ArrayList<TextComponent> components;
 
-    public TextComponentImpl(TextComponentType type) {
+    public RegularTextComponent(TextComponentTypesEnum type) {
         this.type = type;
         this.components = new ArrayList<>();
     }
@@ -22,31 +21,23 @@ public class TextComponentImpl implements TextComponent {
         return null;
     }
 
+
+
     @Override
-    public void append(TextComponent textComponent) throws NotCompatibleType {
+    public void append(TextComponent textComponent) {
 
         if (textComponent == null){
-            throw new NullPointerException("Null is not acceptable here");
-        }
-
-        if (type.getInnerType() != textComponent.getType()){
-            throw new NotCompatibleType(
-                    "Type " + textComponent.getType().name() + "is not compatible for " + type.name());
+            return;
         }
 
         components.add(textComponent);
     }
 
     @Override
-    public void add(int index, TextComponent textComponent) throws NotCompatibleType {
+    public void add(int index, TextComponent textComponent) {
 
         if (textComponent == null){
-            throw new NullPointerException("Null is not acceptable here");
-        }
-
-        if (type.getInnerType() != textComponent.getType()){
-            throw new NotCompatibleType(
-                    "Type " + textComponent.getType().name() + "is not compatible for " + type.name());
+            return;
         }
 
         components.add(index, textComponent);
@@ -63,7 +54,7 @@ public class TextComponentImpl implements TextComponent {
         return components.remove(index);
     }
 
-    @Override
+    /*@Override
     public String getText() {
 
         String res;
@@ -85,7 +76,7 @@ public class TextComponentImpl implements TextComponent {
         }
 
         return null;
-    }
+    }*/
 
     @Override
     public ArrayList<TextComponent> getComponents() {
@@ -93,11 +84,33 @@ public class TextComponentImpl implements TextComponent {
     }
 
     @Override
-    public TextComponentType getType() {
+    public TextComponent getComponents(int index) throws OperationNotSupportedException {
+        return components.get(index);
+    }
+
+    @Override
+    public TextComponentTypesEnum getType() {
         return type;
     }
 
-    private String restoreText(String separator){
+    @Override
+    public String getStringRepresentation() {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (TextComponent tc : components){
+            sb.append(tc.getStringRepresentation());
+        }
+
+        return sb.toString();
+    }
+
+    /*@Override
+    public TextComponent getSymbol(char character) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException("Can't return symbol!!!");
+    }*/
+
+    /*private String restoreText(String separator){
 
         StringBuilder sb = new StringBuilder();
 
@@ -107,5 +120,5 @@ public class TextComponentImpl implements TextComponent {
         }
 
         return sb.toString();
-    }
+    }*/
 }
