@@ -2,25 +2,29 @@ package by.epam.jwd.yakovlev.textparser.entity;
 
 import by.epam.jwd.yakovlev.textparser.entity.exception.NotCompatibleType;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 
 public interface TextComponent {
 
-    TextComponent processTextComponent(TextComponent textComponent);
+    TextComponent processTextComponent(TextComponent textComponent) throws OperationNotSupportedException;
 
-    void append(TextComponent textComponent) throws NotCompatibleType;
+    void append(TextComponent textComponent) throws OperationNotSupportedException;
 
-    void add(int index, TextComponent textComponent) throws NotCompatibleType;
+    void add(int index, TextComponent textComponent) throws NotCompatibleType, OperationNotSupportedException;
 
-    boolean remove(Object o);
+    boolean remove(Object o) throws OperationNotSupportedException;
 
-    TextComponent remove(int index);
+    TextComponent remove(int index) throws OperationNotSupportedException;
 
-    String getText();
+    ArrayList<TextComponent> getComponents() throws OperationNotSupportedException;
 
-    ArrayList<TextComponent> getComponents();
+    TextComponent getComponents(int index) throws OperationNotSupportedException;
 
-    TextComponentType getType();
+    TextComponentTypesEnum getType();
 
+    //TextComponent getSymbol(char character) throws OperationNotSupportedException;
+
+    String getStringRepresentation();
 
 }
