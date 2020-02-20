@@ -17,6 +17,10 @@ public class ServiceParserImpl implements ServiceParser {
         TextComponent text = new RegularTextComponent(TypeEnum.TEXT);
 
         switch (getAppropriateType(string)) {
+            case SYMBOL: {
+                text.getComponentList().add(buildSymbol(string));
+                return text;
+            }
             case PARAGRAPH: {
                 text.getComponentList().add(buildParagraph(string));
                 return text;
@@ -224,6 +228,9 @@ public class ServiceParserImpl implements ServiceParser {
 
     private TypeEnum getAppropriateType(String string) {
 
+        if (string.length() == 1){
+            return TypeEnum.SYMBOL;
+        }
         if (TYPE_VALIDATOR.isTypeParagraph(string)) {
             return TypeEnum.PARAGRAPH;
         }
@@ -233,6 +240,7 @@ public class ServiceParserImpl implements ServiceParser {
         if (TYPE_VALIDATOR.isTypeToken(string)) {
             return TypeEnum.TOKEN;
         }
+
 
         return TypeEnum.TEXT;
     }

@@ -236,6 +236,28 @@ public class ServiceParserImplTest {
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
 
+    @Test
+    public void buildTextPositive5Test() {
+
+        String text = "S";
+
+        TextComponent textComponent = null;
+
+        textComponent = PARSER.buildText(text);
+
+        Assert.assertNotNull(textComponent);
+
+        printTextComponent(textComponent);
+
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TEXT);
+
+        Assert.assertTrue(textComponent.getComponentList().size() == 1);
+
+        Assert.assertEquals(textComponent.getComponentList().get(0).getType(), TypeEnum.SYMBOL);
+
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
+    }
+
     private void printTextComponent(TextComponent textComponent) {
 
         if (textComponent.getComponentList().size() == 0) {
