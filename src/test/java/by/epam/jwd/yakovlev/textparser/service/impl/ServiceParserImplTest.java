@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.naming.OperationNotSupportedException;
+import java.util.ArrayList;
 
 public class ServiceParserImplTest {
 
@@ -114,7 +115,7 @@ public class ServiceParserImplTest {
     }
 
     @Test
-    public void buildNumberNegativeTest() {
+    public void buildEquationPositiveTest() {
 
         String text1 = "5|(1&2&(3|(4&(6^5|6&47)|3)|2)|1)";
 
@@ -122,23 +123,9 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
+        //printTextComponent(textComponent);
+
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text1));
-    }
-
-    @Test
-    public void buildEquationPositiveTest() {
-
-        String text = "356.58";
-
-        TextComponent textComponent = null;
-
-        textComponent = PARSER.buildNumber(text);
-
-        Assert.assertNotNull(textComponent);
-
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.NUMBER);
-
-        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
 
     @Test
@@ -197,7 +184,49 @@ public class ServiceParserImplTest {
         //System.out.println(textComponent.getStringRepresentation());
     }
 
+    @Test
+    public void buildTextSymbolsChainPositiveTest() {
+
+        String text = "Any chane of symbols...";
+
+        ArrayList<TextSymbol> chain = PARSER.buildTextSymbolsChain(text);
+
+        Assert.assertNotNull(chain);
+
+        StringBuilder restoredString = new StringBuilder();
+
+        for (TextSymbol ts : chain){
+            restoredString.append(ts.getChar());
+        }
+
+        Assert.assertTrue(restoredString.toString().equals(text));
+    }
+
+    @Test
+    public void buildTextSymbolsChainNegativeTest() {
+
+        String text1 = "";
+        String text2 = null;
+
+        ArrayList<TextSymbol> chain1 = PARSER.buildTextSymbolsChain(text1);
+        ArrayList<TextSymbol> chain2 = PARSER.buildTextSymbolsChain(text2);
+
+        Assert.assertNotNull(chain1);
+        Assert.assertNotNull(chain2);
+
+        Assert.assertTrue(chain1.size() == 0);
+        Assert.assertTrue(chain2.size() == 0);
+    }
+
     private void printTextComponent(TextComponent textComponent) {
+
+        try {
+            if (textComponent.getComponents().size() == 0){
+                System.out.println("There are no components!!!");
+            }
+        } catch (OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+        }
 
         try {
             String symbol;
@@ -218,4 +247,6 @@ public class ServiceParserImplTest {
             System.out.println(e.getMessage());
         }
     }
+
+
 }

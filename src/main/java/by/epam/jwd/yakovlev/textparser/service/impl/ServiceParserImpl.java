@@ -9,34 +9,20 @@ import by.epam.jwd.yakovlev.textparser.service.ServiceParser;
 import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ServiceParserImpl implements ServiceParser {
 
     public static final ServiceTypeValidator TYPE_VALIDATOR = new ServiceTypeValidator();
+    public static final String EMPTY_STRING = "";
+    public static final int ZERO = 0;
 
     TextComponent buildText(String string) {
 
         TextComponent text = new RegularTextComponent(TextComponentTypesEnum.TEXT);
 
-        Matcher tokenMatcher = TypeEnum.PARAGRAPH.getPattern().matcher(string);
-        String temporaryChainOfSymbol = "";
-        int startTemporaryChainOfSymbol = 0;
-
-        while (tokenMatcher.find(startTemporaryChainOfSymbol)) {
-
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, tokenMatcher.start());
-            startTemporaryChainOfSymbol = tokenMatcher.end();
-            addChainOfSymbols(text, temporaryChainOfSymbol);
-            try {
-                text.append(buildParagraph(tokenMatcher.group()));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-
-        if (string.length() > startTemporaryChainOfSymbol) {
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
-            addChainOfSymbols(text, temporaryChainOfSymbol);
+        try {
+            text.getComponents().addAll(parseToTextComponentsList(TypeEnum.PARAGRAPH, string));
+        } catch (OperationNotSupportedException e) {
         }
 
         return text;
@@ -50,24 +36,9 @@ public class ServiceParserImpl implements ServiceParser {
 
         TextComponent paragraph = new RegularTextComponent(TextComponentTypesEnum.PARAGRAPH);
 
-        Matcher tokenMatcher = TypeEnum.SENTENCE.getPattern().matcher(string);
-        String temporaryChainOfSymbol = "";
-        int startTemporaryChainOfSymbol = 0;
-
-        while (tokenMatcher.find(startTemporaryChainOfSymbol)) {
-
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, tokenMatcher.start());
-            startTemporaryChainOfSymbol = tokenMatcher.end();
-            addChainOfSymbols(paragraph, temporaryChainOfSymbol);
-            try {
-                paragraph.append(buildSentence(tokenMatcher.group()));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-
-        if (string.length() > startTemporaryChainOfSymbol) {
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
-            addChainOfSymbols(paragraph, temporaryChainOfSymbol);
+        try {
+            paragraph.getComponents().addAll(parseToTextComponentsList(TypeEnum.SENTENCE, string));
+        } catch (OperationNotSupportedException e) {
         }
 
         return paragraph;
@@ -79,32 +50,15 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-
         TextComponent sentence = new RegularTextComponent(TextComponentTypesEnum.SENTENCE);
 
-        Matcher tokenMatcher = TypeEnum.TOKEN.getPattern().matcher(string);
-        String temporaryChainOfSymbol = "";
-        int startTemporaryChainOfSymbol = 0;
-
-        while (tokenMatcher.find(startTemporaryChainOfSymbol)) {
-
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, tokenMatcher.start());
-            startTemporaryChainOfSymbol = tokenMatcher.end();
-            addChainOfSymbols(sentence, temporaryChainOfSymbol);
-            try {
-                sentence.append(buildToken(tokenMatcher.group()));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-
-        if (string.length() > startTemporaryChainOfSymbol) {
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
-            addChainOfSymbols(sentence, temporaryChainOfSymbol);
+        try {
+            sentence.getComponents().addAll(parseToTextComponentsList(TypeEnum.TOKEN, string));
+        } catch (OperationNotSupportedException e) {
         }
 
         return sentence;
     }
-
 
     TextComponent buildToken(String string) {
 
@@ -132,24 +86,9 @@ public class ServiceParserImpl implements ServiceParser {
 
         TextComponent regularToken = new RegularTextComponent(TextComponentTypesEnum.TOKEN);
 
-        Matcher wordMatcher = TypeEnum.WORD.getPattern().matcher(string);
-        String temporaryChainOfSymbol = "";
-        int startTemporaryChainOfSymbol = 0;
-
-        while (wordMatcher.find(startTemporaryChainOfSymbol)) {
-
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, wordMatcher.start());
-            startTemporaryChainOfSymbol = wordMatcher.end();
-            addChainOfSymbols(regularToken, temporaryChainOfSymbol);
-            try {
-                regularToken.append(buildWord(wordMatcher.group()));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-
-        if (string.length() > startTemporaryChainOfSymbol) {
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
-            addChainOfSymbols(regularToken, temporaryChainOfSymbol);
+        try {
+            regularToken.getComponents().addAll(parseToTextComponentsList(TypeEnum.WORD, string));
+        } catch (OperationNotSupportedException e) {
         }
 
         return regularToken;
@@ -163,24 +102,9 @@ public class ServiceParserImpl implements ServiceParser {
 
         TextComponent equation = new RegularTextComponent(TextComponentTypesEnum.EQUATION);
 
-        Matcher numberMatcher = TypeEnum.NUMBER.getPattern().matcher(string);
-        String temporaryChainOfSymbol = "";
-        int startTemporaryChainOfSymbol = 0;
-
-        while (numberMatcher.find(startTemporaryChainOfSymbol)) {
-
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, numberMatcher.start());
-            startTemporaryChainOfSymbol = numberMatcher.end();
-            addChainOfSymbols(equation, temporaryChainOfSymbol);
-            try {
-                equation.append(buildNumber(numberMatcher.group()));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-
-        if (string.length() > startTemporaryChainOfSymbol) {
-            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
-            addChainOfSymbols(equation, temporaryChainOfSymbol);
+        try {
+            equation.getComponents().addAll(parseToTextComponentsList(TypeEnum.NUMBER, string));
+        } catch (OperationNotSupportedException e) {
         }
 
         return equation;
@@ -218,25 +142,70 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextSymbol textSymbol = TextSymbol.getSymbol(string.charAt(0));
+        TextSymbol textSymbol = TextSymbol.getSymbol(string.charAt(ZERO));
 
         return textSymbol;
     }
 
-    private ArrayList<String> parseText(String text, Pattern pattern) {
+    private ArrayList<TextComponent> parseToTextComponentsList(TypeEnum type, String string) {
 
-        Matcher matcher = pattern.matcher(text);
-        ArrayList<String> stringList = new ArrayList<>();
+        ArrayList<TextComponent> componentList = new ArrayList<>();
 
-        while (matcher.find()) {
-            for (int i = 1; i <= matcher.groupCount(); i++) {
-                if (matcher.group(i).length() > 0) {
-                    stringList.add(matcher.group(i));
-                }
-            }
+        if (type == null || string == null){
+            return componentList;
         }
 
-        return stringList;
+        TextComponent textComponent = null;
+        Matcher matcher = type.getPattern().matcher(string);
+        String chainOfSymbol;
+        int charsChainStart = ZERO;
+
+        while (matcher.find(charsChainStart)) {
+
+            chainOfSymbol = string.substring(charsChainStart, matcher.start());
+            charsChainStart = matcher.end();
+            componentList.addAll(buildTextSymbolsChain(chainOfSymbol));
+
+            switch (type) {
+                case EQUATION: {
+                    textComponent = buildEquation(matcher.group());
+                    System.out.println("***");
+                    System.out.println(componentList.size());
+                    break;
+                }
+                case TOKEN: {
+                    textComponent = buildToken(matcher.group());
+                    break;
+                }
+                case SENTENCE: {
+                    textComponent = buildSentence(matcher.group());
+                    break;
+                }
+                case PARAGRAPH: {
+                    textComponent = buildParagraph(matcher.group());
+                    break;
+                }
+                case NUMBER: {
+                    textComponent = buildNumber(matcher.group());
+                    break;
+                }
+                case WORD: {
+                    textComponent = buildWord(matcher.group());
+                    break;
+                }
+                default: {
+                    return new ArrayList<>();
+                }
+            }
+            componentList.add(textComponent);
+        }
+
+        if (string.length() > charsChainStart) {
+            chainOfSymbol = string.substring(charsChainStart);
+            componentList.addAll(buildTextSymbolsChain(chainOfSymbol));
+        }
+
+        return componentList;
     }
 
     private void addChainOfSymbols(TextComponent textComponent, String string) {
@@ -247,5 +216,23 @@ public class ServiceParserImpl implements ServiceParser {
             } catch (OperationNotSupportedException e) {
             }
         }
+    }
+
+    public ArrayList<TextSymbol> buildTextSymbolsChain(String string) {
+
+        ArrayList<TextSymbol> chain = new ArrayList<>();
+
+        if (string == null || string == EMPTY_STRING) {
+            return chain;
+        }
+
+        char[] charArray = string.toCharArray();
+
+        for (char ch : charArray) {
+
+            chain.add(TextSymbol.getSymbol(ch));
+        }
+
+        return chain;
     }
 }
