@@ -3,15 +3,14 @@ package by.epam.jwd.yakovlev.textparser.service.impl;
 import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.TextComponentTypesEnum;
 import by.epam.jwd.yakovlev.textparser.entity.TextSymbol;
-import by.epam.jwd.yakovlev.textparser.entity.exception.NotCompatibleType;
 import org.junit.Assert;
 import org.junit.Test;
 
 import javax.naming.OperationNotSupportedException;
 
-public class ServiceParsersImplTest {
+public class ServiceParserImplTest {
 
-    public static final ServiceParsersImpl PARSER = new ServiceParsersImpl();
+    public static final ServiceParserImpl PARSER = new ServiceParserImpl();
 
     public static final String TEXT = "\tIt has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged. It was popularised in the 5|(1&2&(3|(4&(6^5|6&47)|3)|2)|1) with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
             "\tIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using (~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78 Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using (Content here), content here', making it look like readable English.\n" +
@@ -145,7 +144,7 @@ public class ServiceParsersImplTest {
     @Test
     public void buildSentencePositiveTest() {
 
-        String text = "\tIt has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged.";
+        String text = "It has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged.";
 
         TextComponent textComponent = null;
 
@@ -160,62 +159,63 @@ public class ServiceParsersImplTest {
         //printTextComponent(textComponent);
     }
 
-   /* @Test
-    public void parseTextToParagraphsPositiveTest() {
+    @Test
+    public void buildParagraphPositiveTest() {
 
-        ArrayList<String> actualParagraphs = PARSER.parseTextToParagraphs(TEXT);
+        String text = "\tIt has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged. It was popularised in the 5|(1&2&(3|(4&(6^5|6&47)|3)|2)|1) with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n";
 
-        //print(actualParagraphs);
+        TextComponent textComponent = null;
 
-        String actualFirstParagraph = null;
-        String actualSecondParagraph = null;
-        String actualThirdParagraph = null;
-        String actualForthParagraph = null;
+        textComponent = PARSER.buildParagraph(text);
 
-        if (actualParagraphs.size() == 4) {
-            actualFirstParagraph = actualParagraphs.get(0);
-            actualSecondParagraph = actualParagraphs.get(1);
-            actualThirdParagraph = actualParagraphs.get(2);
-            actualForthParagraph = actualParagraphs.get(3);
-        }
+        Assert.assertNotNull(textComponent);
 
-        Assert.assertNotNull(actualFirstParagraph);
-        Assert.assertNotNull(actualSecondParagraph);
-        Assert.assertNotNull(actualThirdParagraph);
-        Assert.assertNotNull(actualForthParagraph);
+        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.PARAGRAPH);
 
-        Assert.assertTrue(actualFirstParagraph.equals(FIRST_PARAGRAPH));
-        Assert.assertTrue(actualSecondParagraph.equals(SECOND_PARAGRAPH));
-        Assert.assertTrue(actualThirdParagraph.equals(THIRD_PARAGRAPH));
-        Assert.assertTrue(actualForthParagraph.equals(FORTH_PARAGRAPH));
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
 
+        //printTextComponent(textComponent);
     }
 
     @Test
-    public void parseTextPositiveTest() {
+    public void buildTextPositiveTest() {
 
-        ArrayList<String> actualSentenceList = PARSER.parseText(FIRST_PARAGRAPH, );
+        String text = TEXT;
 
-        System.out.println("number of sentences - " + actualSentenceList.size());
+        TextComponent textComponent = null;
 
-        print(actualSentenceList);
+        textComponent = PARSER.buildText(text);
+
+        Assert.assertNotNull(textComponent);
+
+        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.TEXT);
+
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
+
+        //printTextComponent(textComponent);
+
+        //System.out.println(textComponent.getStringRepresentation());
     }
-
-    private void print(ArrayList<String> list) {
-        for (String s : list) {
-            System.out.println(s);
-        }
-    }*/
 
     private void printTextComponent(TextComponent textComponent) {
 
         try {
+            String symbol;
             for (TextComponent tc : textComponent.getComponents()) {
-                System.out.println("type - " + tc.getType().name() + "  value - " + tc.getStringRepresentation());
+                symbol = tc.getStringRepresentation();
+                if (symbol.equals("\n")){
+                    symbol = "\"\\n\"";
+                }
+                if (symbol.equals("\t")){
+                    symbol = "\"\\t\"";
+                }
+                if (symbol.equals(" ")){
+                    symbol = "\" \"";
+                }
+                System.out.println("type - " + tc.getType().name() + "  value - " + symbol);
             }
         } catch (OperationNotSupportedException e) {
             System.out.println(e.getMessage());
-            ;
         }
     }
 }

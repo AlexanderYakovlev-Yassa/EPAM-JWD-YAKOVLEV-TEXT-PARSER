@@ -4,47 +4,81 @@ import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.RegularTextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.TextComponentTypesEnum;
 import by.epam.jwd.yakovlev.textparser.entity.TextSymbol;
-import by.epam.jwd.yakovlev.textparser.service.ServiceParsers;
+import by.epam.jwd.yakovlev.textparser.service.ServiceParser;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ServiceParsersImpl implements ServiceParsers {
+public class ServiceParserImpl implements ServiceParser {
 
     public static final ServiceTypeValidator TYPE_VALIDATOR = new ServiceTypeValidator();
 
-    public ArrayList<String> parseText(String text, TextComponentTypesEnum type) {
+    TextComponent buildText(String string) {
 
-        ArrayList<String> stringList = new ArrayList<>();
+        TextComponent text = new RegularTextComponent(TextComponentTypesEnum.TEXT);
 
-        switch (type) {
-            case TEXT: {
-                stringList = parseText(text, TypeEnum.PARAGRAPH.getPattern());
-                break;
-            }
-            case PARAGRAPH: {
-                stringList = parseText(text, TypeEnum.SENTENCE.getPattern());
-                break;
-            }
-            case SYMBOL: {
-                stringList = parseText(text, TypeEnum.TOKEN.getPattern());
-                break;
-            }
-            /*case TOKEN: {
-                stringList = parseText(text, TypeEnum.TOKEN_COMPONENTS.getPattern());
-                break;
-            }*/
-            case WORD: {
-                stringList = parseText(text, TypeEnum.SYMBOL.getPattern());
+        Matcher tokenMatcher = TypeEnum.PARAGRAPH.getPattern().matcher(string);
+        String temporaryChainOfSymbol = "";
+        int startTemporaryChainOfSymbol = 0;
+
+        while (tokenMatcher.find(startTemporaryChainOfSymbol)) {
+
+            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, tokenMatcher.start());
+            startTemporaryChainOfSymbol = tokenMatcher.end();
+            addChainOfSymbols(text, temporaryChainOfSymbol);
+            try {
+                text.append(buildParagraph(tokenMatcher.group()));
+            } catch (OperationNotSupportedException e) {
             }
         }
 
-        return stringList;
+        if (string.length() > startTemporaryChainOfSymbol) {
+            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
+            addChainOfSymbols(text, temporaryChainOfSymbol);
+        }
+
+        return text;
+    }
+
+    TextComponent buildParagraph(String string) {
+
+        if (!TYPE_VALIDATOR.isTypeParagraph(string)) {
+            return null;
+        }
+
+        TextComponent paragraph = new RegularTextComponent(TextComponentTypesEnum.PARAGRAPH);
+
+        Matcher tokenMatcher = TypeEnum.SENTENCE.getPattern().matcher(string);
+        String temporaryChainOfSymbol = "";
+        int startTemporaryChainOfSymbol = 0;
+
+        while (tokenMatcher.find(startTemporaryChainOfSymbol)) {
+
+            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol, tokenMatcher.start());
+            startTemporaryChainOfSymbol = tokenMatcher.end();
+            addChainOfSymbols(paragraph, temporaryChainOfSymbol);
+            try {
+                paragraph.append(buildSentence(tokenMatcher.group()));
+            } catch (OperationNotSupportedException e) {
+            }
+        }
+
+        if (string.length() > startTemporaryChainOfSymbol) {
+            temporaryChainOfSymbol = string.substring(startTemporaryChainOfSymbol);
+            addChainOfSymbols(paragraph, temporaryChainOfSymbol);
+        }
+
+        return paragraph;
     }
 
     TextComponent buildSentence(String string) {
+
+        if (!TYPE_VALIDATOR.isTypeSentence(string)) {
+            return null;
+        }
+
 
         TextComponent sentence = new RegularTextComponent(TextComponentTypesEnum.SENTENCE);
 

@@ -4,10 +4,9 @@ import java.util.regex.Pattern;
 
 public enum TypeEnum {
 
-    PARAGRAPH("[^\\n]+"),
+    PARAGRAPH("[^\\n]+[\\n]"),
     //SENTENCE("([^\\n]([\\d][\\.][\\d])*([^\\.\\!\\?]))+[\\.\\!\\?]"),
-
-    SENTENCE("([^\\.\\!\\?]+[\\.\\!\\?])"),
+    SENTENCE("[\\w](([^\\.\\!\\?\\n])|([\\d]+[\\.][\\d]+))+[\\.\\!\\?]+"),
     TOKEN("[\\S]+"),
     WORD("([\\w]+)"),
     EQUATION("([\\d()|&+\\-\\*\\/<>^~]+)"),

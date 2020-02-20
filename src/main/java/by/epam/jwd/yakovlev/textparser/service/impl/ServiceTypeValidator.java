@@ -39,13 +39,22 @@ public class ServiceTypeValidator {
         return TypeEnum.TOKEN.getPattern().matcher(string).matches();
     }
 
-    /*public boolean isTypeSentence(String string){
+    public boolean isTypeSentence(String string){
 
         if (string == null){
             return false;
         }
 
         return TypeEnum.SENTENCE.getPattern().matcher(string).matches();
-    }*/
+    }
+
+    public boolean isTypeParagraph(String string){
+
+        if (string == null){
+            return false;
+        }
+
+        return TypeEnum.PARAGRAPH.getPattern().matcher(string).matches();
+    }
 
 }

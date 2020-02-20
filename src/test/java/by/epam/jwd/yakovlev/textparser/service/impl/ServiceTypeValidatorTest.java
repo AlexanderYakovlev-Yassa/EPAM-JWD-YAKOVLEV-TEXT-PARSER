@@ -107,12 +107,55 @@ public class ServiceTypeValidatorTest {
         Assert.assertFalse(VALIDATOR.isTypeEquation(textVariant5));
     }
 
-    /*@Test
+    @Test
     public void isTypeSentencePositiveTest() {
 
-        String textVariant1 = "\tIt has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged.";
+        String textVariant1 = "It has survived - not only (five) centuries.";
+        String textVariant2 = "It has survived - not only (five) centuries?";
+        String textVariant3 = "It has survived - not only (five) centuries!!!";
+        String textVariant4 = "It has survived - not only (five) centuries?!";
+        String textVariant5 = "It has survived - not 22.55 only (five) centuries?!";
 
         Assert.assertTrue(VALIDATOR.isTypeSentence(textVariant1));
+        Assert.assertTrue(VALIDATOR.isTypeSentence(textVariant2));
+        Assert.assertTrue(VALIDATOR.isTypeSentence(textVariant3));
+        Assert.assertTrue(VALIDATOR.isTypeSentence(textVariant4));
+        Assert.assertTrue(VALIDATOR.isTypeSentence(textVariant5));
 
-    }*/
+    }
+
+    @Test
+    public void isTypeSentenceNegativeTest() {
+
+        String textVariant1 = "\tIt has survived - not only (five) centuries";
+        String textVariant2 = "\tIt! has survived - not only (five) centuries";
+        String textVariant3 = "\tIt! has survived - not .5 only (five) centuries";
+        String textVariant4 = "\tIt! has survived - not 5. only (five) centuries";
+        String textVariant5 = "\tIt! has survived - not 5. \nonly (five) centuries";
+
+        Assert.assertFalse(VALIDATOR.isTypeSentence(textVariant1));
+        Assert.assertFalse(VALIDATOR.isTypeSentence(textVariant2));
+        Assert.assertFalse(VALIDATOR.isTypeSentence(textVariant3));
+        Assert.assertFalse(VALIDATOR.isTypeSentence(textVariant4));
+        Assert.assertFalse(VALIDATOR.isTypeSentence(textVariant5));
+
+    }
+
+     @Test
+    public void isTypeParagraphPositiveTest() {
+
+        String textVariant1 = "\tIt has survived - not only (five) centuries, but also the leap into.\n";
+
+        Assert.assertTrue(VALIDATOR.isTypeParagraph(textVariant1));
+    }
+
+    @Test
+    public void isTypeParagraphNegativeTest() {
+
+        String textVariant1 = "\tIt has survived - not only (five) centuries, but also the leap into.";
+        String textVariant2 = "\tIt has survived - not only (five) centuries, but also the leap into.\n\n";
+
+        Assert.assertFalse(VALIDATOR.isTypeParagraph(textVariant1));
+        Assert.assertFalse(VALIDATOR.isTypeParagraph(textVariant2));
+    }
 }
