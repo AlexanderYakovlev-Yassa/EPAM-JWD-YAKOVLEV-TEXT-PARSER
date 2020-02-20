@@ -1,8 +1,5 @@
 package by.epam.jwd.yakovlev.textparser.entity;
 
-
-import by.epam.jwd.yakovlev.textparser.entity.exception.NotCompatibleType;
-
 import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +8,7 @@ public class TextSymbol implements TextComponent {
 
     private static final HashSet<TextSymbol> symbolSet = new HashSet<>();
 
-    private TextComponentTypesEnum type = TextComponentTypesEnum.SYMBOL;
+    private TypeEnum type = TypeEnum.SYMBOL;
     private char symbol;
 
     private TextSymbol(char symbol) {
@@ -24,37 +21,15 @@ public class TextSymbol implements TextComponent {
     }
 
     @Override
-    public void append(TextComponent textComponent) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't append to symbol!!!");
+    public ArrayList<TextComponent> getComponentList() {
+        ArrayList<TextComponent> list = new ArrayList<>();
+        list.add(this);
+        return list;
+        //throw new OperationNotSupportedException("Can't return list of text components!!!");
     }
 
     @Override
-    public void add(int index, TextComponent textComponent) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't add to symbol!!!");
-    }
-
-    @Override
-    public boolean remove(Object o) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't remove text component!!!");
-    }
-
-    @Override
-    public TextComponent remove(int index) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't remove text component!!!");
-    }
-
-    @Override
-    public ArrayList<TextComponent> getComponents() throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't return list of text components!!!");
-    }
-
-    @Override
-    public TextComponent getComponents(int index) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Can't return component!!!");
-    }
-
-    @Override
-    public TextComponentTypesEnum getType() {
+    public TypeEnum getType() {
         return type;
     }
 

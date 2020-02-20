@@ -9,21 +9,9 @@ public interface TextComponent {
 
     TextComponent processTextComponent(TextComponent textComponent) throws OperationNotSupportedException;
 
-    void append(TextComponent textComponent) throws OperationNotSupportedException;
+    ArrayList<TextComponent> getComponentList();
 
-    void add(int index, TextComponent textComponent) throws NotCompatibleType, OperationNotSupportedException;
-
-    boolean remove(Object o) throws OperationNotSupportedException;
-
-    TextComponent remove(int index) throws OperationNotSupportedException;
-
-    ArrayList<TextComponent> getComponents() throws OperationNotSupportedException;
-
-    TextComponent getComponents(int index) throws OperationNotSupportedException;
-
-    TextComponentTypesEnum getType();
-
-    //TextComponent getSymbol(char character) throws OperationNotSupportedException;
+    TypeEnum getType();
 
     String getStringRepresentation();
 

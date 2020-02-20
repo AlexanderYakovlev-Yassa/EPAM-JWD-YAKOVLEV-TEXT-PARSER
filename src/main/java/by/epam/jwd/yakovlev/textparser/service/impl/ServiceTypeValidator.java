@@ -1,56 +1,58 @@
 package by.epam.jwd.yakovlev.textparser.service.impl;
 
+import by.epam.jwd.yakovlev.textparser.entity.TypeEnum;
+
 public class ServiceTypeValidator {
 
-    public boolean isTypeWord(String string){
+    public boolean isTypeWord(String string) {
 
-        if (string == null){
+        if (string == null) {
             return false;
         }
 
         return TypeEnum.WORD.getPattern().matcher(string).matches();
     }
 
-    public boolean isTypeSymbol(String string){
+    public boolean isTypeSymbol(String string) {
 
-        if (string == null){
+        if (string == null) {
             return false;
         }
 
-        return  (string.length() == 1);
+        return (string.length() == 1);
     }
 
-    public boolean isTypeNumber(String string){
+    public boolean isTypeNumber(String string) {
 
         return TypeEnum.NUMBER.getPattern().matcher(string).matches();
     }
 
-    public boolean isTypeEquation(String string){
+    public boolean isTypeEquation(String string) {
 
         return TypeEnum.EQUATION.getPattern().matcher(string).matches();
     }
 
-    public boolean isTypeToken(String string){
+    public boolean isTypeToken(String string) {
 
-        if (string == null){
+        if (string == null) {
             return false;
         }
 
         return TypeEnum.TOKEN.getPattern().matcher(string).matches();
     }
 
-    public boolean isTypeSentence(String string){
+    public boolean isTypeSentence(String string) {
 
-        if (string == null){
+        if (string == null) {
             return false;
         }
 
         return TypeEnum.SENTENCE.getPattern().matcher(string).matches();
     }
 
-    public boolean isTypeParagraph(String string){
+    public boolean isTypeParagraph(String string) {
 
-        if (string == null){
+        if (string == null) {
             return false;
         }
 

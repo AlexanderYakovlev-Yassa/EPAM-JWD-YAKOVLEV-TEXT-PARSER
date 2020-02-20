@@ -1,13 +1,10 @@
 package by.epam.jwd.yakovlev.textparser.service.impl;
 
 import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
-import by.epam.jwd.yakovlev.textparser.entity.TextComponentTypesEnum;
 import by.epam.jwd.yakovlev.textparser.entity.TextSymbol;
+import by.epam.jwd.yakovlev.textparser.entity.TypeEnum;
 import org.junit.Assert;
 import org.junit.Test;
-
-import javax.naming.OperationNotSupportedException;
-import java.util.ArrayList;
 
 public class ServiceParserImplTest {
 
@@ -18,12 +15,6 @@ public class ServiceParserImplTest {
             "\tIt is a (4^5|1&2<<(2|5>>2&71))|1200 established fact that a reader will be of a page when looking at its layout.\n" +
             "\tBye.\n";
 
-    public static final String FIRST_PARAGRAPH = "\tIt has survived - not only (five) centuries, but also the leap into 13<<2 electronic type setting, remaining 3>>5 essentially ~6&9|(3&4) unchanged. It was popularised in the 5|(1&2&(3|(4&(6^5|6&47)|3)|2)|1) with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-    public static final String SECOND_PARAGRAPH = "\tIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using (~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78 Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using (Content here), content here', making it look like readable English.";
-    public static final String THIRD_PARAGRAPH = "\tIt is a (4^5|1&2<<(2|5>>2&71))|1200 established fact that a reader will be of a page when looking at its layout.";
-    public static final String FORTH_PARAGRAPH = "\tBye.";
-
-
     @Test
     public void buildSymbolPositiveTest() {
 
@@ -32,7 +23,7 @@ public class ServiceParserImplTest {
         TextComponent textComponent = PARSER.buildSymbol("s");
 
         Assert.assertNotNull(textComponent);
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.SYMBOL);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.SYMBOL);
 
         TextSymbol textSymbol = (TextSymbol) textComponent;
 
@@ -50,7 +41,7 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.WORD);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.WORD);
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
@@ -67,20 +58,17 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.TOKEN);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TOKEN);
 
         //printTextComponent(textComponent);
 
-        try {
-            Assert.assertEquals(textComponent.getComponents(0).getType(), TextComponentTypesEnum.SYMBOL);
-            Assert.assertTrue(textComponent.getComponents(0).getStringRepresentation().equals("("));
-            Assert.assertEquals(textComponent.getComponents(1).getType(), TextComponentTypesEnum.WORD);
-            Assert.assertTrue(textComponent.getComponents(1).getStringRepresentation().equals("five"));
-            Assert.assertEquals(textComponent.getComponents(2).getType(), TextComponentTypesEnum.SYMBOL);
-            Assert.assertTrue(textComponent.getComponents(2).getStringRepresentation().equals(")"));
-        } catch (OperationNotSupportedException e) {
-            Assert.fail(e.getMessage());
-        }
+        Assert.assertEquals(textComponent.getComponentList().get(0).getType(), TypeEnum.SYMBOL);
+        Assert.assertTrue(textComponent.getComponentList().get(0).getStringRepresentation().equals("("));
+        Assert.assertEquals(textComponent.getComponentList().get(1).getType(), TypeEnum.WORD);
+        Assert.assertTrue(textComponent.getComponentList().get(1).getStringRepresentation().equals("five"));
+        Assert.assertEquals(textComponent.getComponentList().get(2).getType(), TypeEnum.SYMBOL);
+        Assert.assertTrue(textComponent.getComponentList().get(2).getStringRepresentation().equals(")"));
+
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
@@ -109,7 +97,7 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.NUMBER);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.NUMBER);
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
@@ -139,7 +127,7 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.SENTENCE);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.SENTENCE);
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
 
@@ -157,7 +145,7 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.PARAGRAPH);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.PARAGRAPH);
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
 
@@ -175,78 +163,98 @@ public class ServiceParserImplTest {
 
         Assert.assertNotNull(textComponent);
 
-        Assert.assertEquals(textComponent.getType(), TextComponentTypesEnum.TEXT);
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TEXT);
 
         Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
 
         //printTextComponent(textComponent);
-
-        //System.out.println(textComponent.getStringRepresentation());
     }
 
     @Test
-    public void buildTextSymbolsChainPositiveTest() {
+    public void buildTextPositive2Test() {
 
-        String text = "Any chane of symbols...";
+        String text = "Hi!";
 
-        ArrayList<TextSymbol> chain = PARSER.buildTextSymbolsChain(text);
+        TextComponent textComponent = null;
 
-        Assert.assertNotNull(chain);
+        textComponent = PARSER.buildText(text);
 
-        StringBuilder restoredString = new StringBuilder();
+        Assert.assertNotNull(textComponent);
 
-        for (TextSymbol ts : chain){
-            restoredString.append(ts.getChar());
-        }
+        //printTextComponent(textComponent);
 
-        Assert.assertTrue(restoredString.toString().equals(text));
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TEXT);
+
+        Assert.assertTrue(textComponent.getComponentList().size() == 1);
+
+        Assert.assertEquals(textComponent.getComponentList().get(0).getType(), TypeEnum.SENTENCE);
+
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
 
     @Test
-    public void buildTextSymbolsChainNegativeTest() {
+    public void buildTextPositive3Test() {
 
-        String text1 = "";
-        String text2 = null;
+        String text = "Hi!\n";
 
-        ArrayList<TextSymbol> chain1 = PARSER.buildTextSymbolsChain(text1);
-        ArrayList<TextSymbol> chain2 = PARSER.buildTextSymbolsChain(text2);
+        TextComponent textComponent = null;
 
-        Assert.assertNotNull(chain1);
-        Assert.assertNotNull(chain2);
+        textComponent = PARSER.buildText(text);
 
-        Assert.assertTrue(chain1.size() == 0);
-        Assert.assertTrue(chain2.size() == 0);
+        Assert.assertNotNull(textComponent);
+
+        //printTextComponent(textComponent);
+
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TEXT);
+
+        Assert.assertTrue(textComponent.getComponentList().size() == 1);
+
+        Assert.assertEquals(textComponent.getComponentList().get(0).getType(), TypeEnum.PARAGRAPH);
+
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
+    }
+
+    @Test
+    public void buildTextPositive4Test() {
+
+        String text = "Self-extractor";
+
+        TextComponent textComponent = null;
+
+        textComponent = PARSER.buildText(text);
+
+        Assert.assertNotNull(textComponent);
+
+        //printTextComponent(textComponent);
+
+        Assert.assertEquals(textComponent.getType(), TypeEnum.TEXT);
+
+        Assert.assertTrue(textComponent.getComponentList().size() == 1);
+
+        Assert.assertEquals(textComponent.getComponentList().get(0).getType(), TypeEnum.TOKEN);
+
+        Assert.assertTrue(textComponent.getStringRepresentation().equals(text));
     }
 
     private void printTextComponent(TextComponent textComponent) {
 
-        try {
-            if (textComponent.getComponents().size() == 0){
-                System.out.println("There are no components!!!");
-            }
-        } catch (OperationNotSupportedException e) {
-            System.out.println(e.getMessage());
+        if (textComponent.getComponentList().size() == 0) {
+            System.out.println("There are no components!!!");
         }
 
-        try {
-            String symbol;
-            for (TextComponent tc : textComponent.getComponents()) {
-                symbol = tc.getStringRepresentation();
-                if (symbol.equals("\n")){
-                    symbol = "\"\\n\"";
-                }
-                if (symbol.equals("\t")){
-                    symbol = "\"\\t\"";
-                }
-                if (symbol.equals(" ")){
-                    symbol = "\" \"";
-                }
-                System.out.println("type - " + tc.getType().name() + "  value - " + symbol);
+        String symbol;
+        for (TextComponent tc : textComponent.getComponentList()) {
+            symbol = tc.getStringRepresentation();
+            if (symbol.equals("\n")) {
+                symbol = "\"\\n\"";
             }
-        } catch (OperationNotSupportedException e) {
-            System.out.println(e.getMessage());
+            if (symbol.equals("\t")) {
+                symbol = "\"\\t\"";
+            }
+            if (symbol.equals(" ")) {
+                symbol = "\" \"";
+            }
+            System.out.println("type - " + tc.getType().name() + "  value - " + symbol);
         }
     }
-
-
 }

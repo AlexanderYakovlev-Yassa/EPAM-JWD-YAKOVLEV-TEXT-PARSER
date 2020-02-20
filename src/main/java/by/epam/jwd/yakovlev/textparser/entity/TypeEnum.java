@@ -1,11 +1,11 @@
-package by.epam.jwd.yakovlev.textparser.service.impl;
+package by.epam.jwd.yakovlev.textparser.entity;
 
 import java.util.regex.Pattern;
 
 public enum TypeEnum {
 
+    TEXT("[.]"),
     PARAGRAPH("[^\\n]+[\\n]"),
-    //SENTENCE("([^\\n]([\\d][\\.][\\d])*([^\\.\\!\\?]))+[\\.\\!\\?]"),
     SENTENCE("[\\w](([^\\.\\!\\?\\n])|([\\d]+[\\.][\\d]+))+[\\.\\!\\?]+"),
     TOKEN("[\\S]+"),
     WORD("([\\w]+)"),

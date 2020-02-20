@@ -1,12 +1,8 @@
 package by.epam.jwd.yakovlev.textparser.service.impl;
 
-import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
-import by.epam.jwd.yakovlev.textparser.entity.RegularTextComponent;
-import by.epam.jwd.yakovlev.textparser.entity.TextComponentTypesEnum;
-import by.epam.jwd.yakovlev.textparser.entity.TextSymbol;
+import by.epam.jwd.yakovlev.textparser.entity.*;
 import by.epam.jwd.yakovlev.textparser.service.ServiceParser;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -18,12 +14,24 @@ public class ServiceParserImpl implements ServiceParser {
 
     TextComponent buildText(String string) {
 
-        TextComponent text = new RegularTextComponent(TextComponentTypesEnum.TEXT);
+        TextComponent text = new RegularTextComponent(TypeEnum.TEXT);
 
-        try {
-            text.getComponents().addAll(parseToTextComponentsList(TypeEnum.PARAGRAPH, string));
-        } catch (OperationNotSupportedException e) {
+        switch (getAppropriateType(string)) {
+            case PARAGRAPH: {
+                text.getComponentList().add(buildParagraph(string));
+                return text;
+            }
+            case SENTENCE: {
+                text.getComponentList().add(buildSentence(string));
+                return text;
+            }
+            case TOKEN: {
+                text.getComponentList().add(buildToken(string));
+                return text;
+            }
         }
+
+        text.getComponentList().addAll(parseToTextComponentsList(TypeEnum.PARAGRAPH, string));
 
         return text;
     }
@@ -34,12 +42,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent paragraph = new RegularTextComponent(TextComponentTypesEnum.PARAGRAPH);
+        TextComponent paragraph = new RegularTextComponent(TypeEnum.PARAGRAPH);
 
-        try {
-            paragraph.getComponents().addAll(parseToTextComponentsList(TypeEnum.SENTENCE, string));
-        } catch (OperationNotSupportedException e) {
-        }
+        paragraph.getComponentList().addAll(parseToTextComponentsList(TypeEnum.SENTENCE, string));
 
         return paragraph;
     }
@@ -50,12 +55,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent sentence = new RegularTextComponent(TextComponentTypesEnum.SENTENCE);
+        TextComponent sentence = new RegularTextComponent(TypeEnum.SENTENCE);
 
-        try {
-            sentence.getComponents().addAll(parseToTextComponentsList(TypeEnum.TOKEN, string));
-        } catch (OperationNotSupportedException e) {
-        }
+        sentence.getComponentList().addAll(parseToTextComponentsList(TypeEnum.TOKEN, string));
 
         return sentence;
     }
@@ -66,7 +68,7 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent textComponent = new RegularTextComponent(TextComponentTypesEnum.TOKEN);
+        TextComponent textComponent;
 
         if (TYPE_VALIDATOR.isTypeEquation(string)) {
             textComponent = buildEquation(string);
@@ -84,12 +86,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent regularToken = new RegularTextComponent(TextComponentTypesEnum.TOKEN);
+        TextComponent regularToken = new RegularTextComponent(TypeEnum.TOKEN);
 
-        try {
-            regularToken.getComponents().addAll(parseToTextComponentsList(TypeEnum.WORD, string));
-        } catch (OperationNotSupportedException e) {
-        }
+        regularToken.getComponentList().addAll(parseToTextComponentsList(TypeEnum.WORD, string));
 
         return regularToken;
     }
@@ -100,12 +99,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent equation = new RegularTextComponent(TextComponentTypesEnum.EQUATION);
+        TextComponent equation = new RegularTextComponent(TypeEnum.EQUATION);
 
-        try {
-            equation.getComponents().addAll(parseToTextComponentsList(TypeEnum.NUMBER, string));
-        } catch (OperationNotSupportedException e) {
-        }
+        equation.getComponentList().addAll(parseToTextComponentsList(TypeEnum.NUMBER, string));
 
         return equation;
     }
@@ -116,9 +112,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent number = new RegularTextComponent(TextComponentTypesEnum.NUMBER);
+        TextComponent number = new RegularTextComponent(TypeEnum.NUMBER);
 
-        addChainOfSymbols(number, string);
+        number.getComponentList().addAll(buildTextSymbolsChain(string));
 
         return number;
     }
@@ -129,9 +125,9 @@ public class ServiceParserImpl implements ServiceParser {
             return null;
         }
 
-        TextComponent word = new RegularTextComponent(TextComponentTypesEnum.WORD);
+        TextComponent word = new RegularTextComponent(TypeEnum.WORD);
 
-        addChainOfSymbols(word, string);
+        word.getComponentList().addAll(buildTextSymbolsChain(string));
 
         return word;
     }
@@ -151,7 +147,7 @@ public class ServiceParserImpl implements ServiceParser {
 
         ArrayList<TextComponent> componentList = new ArrayList<>();
 
-        if (type == null || string == null){
+        if (type == null || string == null) {
             return componentList;
         }
 
@@ -208,17 +204,7 @@ public class ServiceParserImpl implements ServiceParser {
         return componentList;
     }
 
-    private void addChainOfSymbols(TextComponent textComponent, String string) {
-        char[] charArray = string.toCharArray();
-        for (char ch : charArray) {
-            try {
-                textComponent.append(TextSymbol.getSymbol(ch));
-            } catch (OperationNotSupportedException e) {
-            }
-        }
-    }
-
-    public ArrayList<TextSymbol> buildTextSymbolsChain(String string) {
+    private ArrayList<TextSymbol> buildTextSymbolsChain(String string) {
 
         ArrayList<TextSymbol> chain = new ArrayList<>();
 
@@ -234,5 +220,20 @@ public class ServiceParserImpl implements ServiceParser {
         }
 
         return chain;
+    }
+
+    private TypeEnum getAppropriateType(String string) {
+
+        if (TYPE_VALIDATOR.isTypeParagraph(string)) {
+            return TypeEnum.PARAGRAPH;
+        }
+        if (TYPE_VALIDATOR.isTypeSentence(string)) {
+            return TypeEnum.SENTENCE;
+        }
+        if (TYPE_VALIDATOR.isTypeToken(string)) {
+            return TypeEnum.TOKEN;
+        }
+
+        return TypeEnum.TEXT;
     }
 }
