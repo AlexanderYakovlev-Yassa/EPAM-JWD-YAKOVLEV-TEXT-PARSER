@@ -1,5 +1,6 @@
 package by.epam.jwd.yakovlev.textparser.parser.impl;
 
+import by.epam.jwd.yakovlev.textparser.entity.reversepolishnotation.MathSign;
 import by.epam.jwd.yakovlev.textparser.parser.Parser;
 
 import by.epam.jwd.yakovlev.textparser.dao.DAOFactory;
@@ -18,12 +19,16 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ParserImpl implements Parser {
 
     private static Validator VALIDATOR = new Validator();
     private static final Logger logger = LogManager.getLogger(ServiceLogicImpl.class);
+
+    private static final Pattern EQUATION_ELEMENTS_REGEX =
+            Pattern.compile("([/])|([*])|([-])|([+])|([(])|([)])|([&])|([|])|([~])|([<]{2})|([>]{2})|([\\d]+)");
 
     public static final int ZERO = 0;
 
@@ -100,5 +105,19 @@ public class ParserImpl implements Parser {
         }
 
         return newSnippetsList;
+    }
+
+    public List<MathSign> parseToMathSign(String rawEquation){
+
+        List<MathSign> equationInnerComponentsList = new ArrayList<>();
+
+        Matcher matcher = EQUATION_ELEMENTS_REGEX.matcher(rawEquation);
+
+        while (matcher.find()){
+
+            equationInnerComponentsList.add(MathSign.recogniseMathSign(matcher.group()));
+        }
+
+        return equationInnerComponentsList;
     }
 }

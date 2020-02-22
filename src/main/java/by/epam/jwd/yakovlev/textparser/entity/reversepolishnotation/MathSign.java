@@ -5,18 +5,18 @@ import java.util.regex.Pattern;
 public enum MathSign implements RPNCompatible {
 
     RIGHT_PARENTHESES(0, "[)]"),
-    LEFT_PARENTHESES(0, "[(]"),
-    BITWISE_AND(1, "[&]"),
-    BITWISE_OR(1, "[|]"),
-    BITWISE_XOR(1, "[\\^]"),
-    BIT_ADDITION(1, "[~]"),
-    RIGHT_BIT_SHIFT(1, "[>]{2}"),
-    LEFT_BIT_SHIFT(1, "[<]{2}"),
-    ADDITION(2, "[+]"),
-    SUBTRACTION(2, "[-]"),
-    MULTIPLICATION(3, "[*]"),
-    DIVISION(3, "[/]"),
-    INTEGER_NUMBER(4, "[\\d]+");
+    LEFT_PARENTHESES(1, "[(]"),
+    BITWISE_AND(2, "[&]"),
+    BITWISE_OR(2, "[|]"),
+    BITWISE_XOR(2, "[\\^]"),
+    BIT_ADDITION(2, "[~]"),
+    RIGHT_BIT_SHIFT(2, "[>]{2}"),
+    LEFT_BIT_SHIFT(2, "[<]{2}"),
+    ADDITION(3, "[+]"),
+    SUBTRACTION(3, "[-]"),
+    MULTIPLICATION(4, "[*]"),
+    DIVISION(4, "[/]"),
+    INTEGER_NUMBER(5, "[\\d]+");
 
     int priority;
     Pattern pattern;
