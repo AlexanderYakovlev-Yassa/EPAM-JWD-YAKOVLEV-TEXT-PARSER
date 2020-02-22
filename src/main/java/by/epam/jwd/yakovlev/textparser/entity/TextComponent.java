@@ -1,18 +1,13 @@
 package by.epam.jwd.yakovlev.textparser.entity;
 
-import by.epam.jwd.yakovlev.textparser.entity.exception.NotCompatibleType;
-
-import javax.naming.OperationNotSupportedException;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TextComponent {
 
-    TextComponent processTextComponent(TextComponent textComponent) throws OperationNotSupportedException;
 
-    ArrayList<TextComponent> getComponentList();
-
-    TypeEnum getType();
-
-    String getStringRepresentation();
-
+    public List<TextComponent> getComponentList();
+    public TypeEnum getType();
+    public String getStringRepresentation();
+    public String getComponentTreeView();
+    public List<TextComponent> getComponentsOfType(TypeEnum typeEnum);
 }

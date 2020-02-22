@@ -4,14 +4,16 @@ import java.util.regex.Pattern;
 
 public enum TypeEnum {
 
-    TEXT("[.]"),
+    TEXT("[\\w\\W]+"),
     PARAGRAPH("[^\\n]+[\\n]"),
     SENTENCE("[\\w](([^\\.\\!\\?\\n])|([\\d]+[\\.][\\d]+))+[\\.\\!\\?]+"),
     TOKEN("[\\S]+"),
     WORD("([\\w]+)"),
-    EQUATION("([\\d()|&+\\-\\*\\/<>^~]+)"),
-    SYMBOL("[.]"),
-    NUMBER("[\\d]+[\\.]?[\\d]*");
+    EQUATION("[\\d()|&+\\-\\*\\/<>^~]+"),
+    INTEGER_NUMBER ("[\\d]+"),
+    FLOAT_POINT_NUMBER("[\\d]+[\\.]?[\\d]*"),
+    MATH_SIGN("[()|&+\\-\\*\\/<>^~]"),
+    SYMBOL("[\\w\\W]");
 
     Pattern pattern;
 

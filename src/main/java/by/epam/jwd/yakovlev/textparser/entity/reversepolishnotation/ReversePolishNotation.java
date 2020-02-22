@@ -1,44 +1,42 @@
 package by.epam.jwd.yakovlev.textparser.entity.reversepolishnotation;
 
+import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.reversepolishnotation.exception.RPNException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReversePolishNotation {
 
-   public RPNCompatible doAction(RPNCompatible sign, RPNCompatible firstArgument, RPNCompatible secondArgument) throws RPNException {
+    private static final Pattern EQUATION_ELEMENTS_REGEX =
+            Pattern.compile("([/])|([*])|([-])|([+])|([(])|([)])|([&])|([|])|([~])|([<]{2})|([>]{2})|([\\d]+)");
 
-       if (sign == null || firstArgument == null || secondArgument == null){
-           throw new RPNException("Wrong argument!!!");
-       }
+    public List<TextComponent> resolveEquation(String rawText){
 
-       if (sign.getClass() != ActionSign.class ||
-               firstArgument.getClass() != RPNNumber.class ||
-               secondArgument.getClass() != RPNNumber.class){
+        List<TextComponent> textComponentList = new ArrayList<>();
+        List<MathSign> equationInnerComponentsList = new ArrayList<>();
 
-           throw new RPNException("Wrong argument!!!");
-       }
+        Matcher matcher = EQUATION_ELEMENTS_REGEX.matcher(rawText);
 
-       ActionSign actionSign = (ActionSign)sign;
-       RPNNumber firstNumber = (RPNNumber)firstArgument;
-       RPNNumber secondNumber = (RPNNumber)secondArgument;
+        while (matcher.find()){
 
-       RPNNumber res = null;
+            equationInnerComponentsList.add(MathSign.recogniseMathSign(matcher.group()));
+        }
 
-       switch (actionSign){
-           case ADDITION: {
-               res.setNumber(firstNumber.getNumber() + (secondNumber.getNumber()));
-           }
-       }
+        for (MathSign ms : equationInnerComponentsList){
+            System.out.println(ms.name());
+        }
 
-       return res;
-   }
+        return textComponentList;
+    }
 
-   public Stack<RPNCompatible> readEquation(ArrayList<RPNCompatible> equationList){
+    public static void main(String[] args) {
 
-       Stack<RPNCompatible> stack = new Stack<>();
+        ReversePolishNotation RPN = new ReversePolishNotation();
 
-       return stack;
-   }
+        RPN.resolveEquation("(~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78");
+    }
 }
