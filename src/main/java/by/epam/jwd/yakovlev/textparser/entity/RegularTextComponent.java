@@ -81,4 +81,14 @@ public class RegularTextComponent implements TextComponent {
 
         return sb.toString();
     }
+
+    @Override
+    public void appendComponentPart(TextComponent componentPart) {
+        components.add(componentPart);
+    }
+
+    @Override
+    public void addComponentPart(int index, TextComponent componentPart) {
+        components.add(index, componentPart);
+    }
 }

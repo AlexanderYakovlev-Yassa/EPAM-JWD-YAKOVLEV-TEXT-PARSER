@@ -12,8 +12,6 @@ public class SymbolTextComponent implements TextComponent {
         this.symbol = symbol;
     }
 
-
-
     @Override
     public TypeEnum getType() {
         return type;
@@ -63,5 +61,13 @@ public class SymbolTextComponent implements TextComponent {
         throw new UnsupportedOperationException("This type doesn't have component parts!!!");
     }
 
+    @Override
+    public void appendComponentPart(TextComponent componentPart) {
+        throw new UnsupportedOperationException("This type doesn't append component parts!!!");
+    }
 
+    @Override
+    public void addComponentPart(int index, TextComponent componentPart) {
+        throw new UnsupportedOperationException("This type doesn't add component parts!!!");
+    }
 }

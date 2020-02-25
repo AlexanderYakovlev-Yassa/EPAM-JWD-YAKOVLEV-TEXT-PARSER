@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface TextComponent {
 
-
-    //public List<TextComponent> getComponentList();
-    public TypeEnum getType();
-    public String getComponentTreeView();
-    public List<TextComponent> getComponentPartsListOfType(TypeEnum typeEnum);
-    public List<TextComponent> getComponentPartsList();
-    public TextComponent getComponentPart(int index);
+    TypeEnum getType();
+    String getComponentTreeView();
+    List<TextComponent> getComponentPartsListOfType(TypeEnum typeEnum);
+    List<TextComponent> getComponentPartsList();
+    TextComponent getComponentPart(int index);
+    void appendComponentPart(TextComponent componentPart);
+    void addComponentPart(int index, TextComponent componentPart);
 }
