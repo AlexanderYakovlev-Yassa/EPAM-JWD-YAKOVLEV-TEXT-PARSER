@@ -9,6 +9,6 @@ public class ByWordLength implements Comparator<TextComponent> {
     @Override
     public int compare(TextComponent o1, TextComponent o2) {
 
-        return o1.getComponentList().size() - o2.getComponentList().size();
+        return o1.getComponentPartsList().size() - o2.getComponentPartsList().size();
     }
 }

@@ -12,3 +12,6 @@
 
 #maven
 /target
+
+#log files
+*.log

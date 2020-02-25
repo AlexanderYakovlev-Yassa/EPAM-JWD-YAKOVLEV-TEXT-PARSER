@@ -20,7 +20,7 @@ public class ServiceLogicImpl implements ServiceLogic {
     @Override
     public List<TextComponent> paragraphsSortedByNumberOfSentences(TextComponent text) {
 
-        List<TextComponent> sortedList = text.getComponentsOfType(TypeEnum.PARAGRAPH);
+        List<TextComponent> sortedList = text.getComponentPartsListOfType(TypeEnum.PARAGRAPH);
         Comparator<TextComponent> componentComparator = new ByNumberOfSentence();
         sortedList.sort(componentComparator);
 
@@ -30,7 +30,7 @@ public class ServiceLogicImpl implements ServiceLogic {
     @Override
     public List<TextComponent> wordsSortedByLength(TextComponent text) {
 
-        List<TextComponent> sortedList = text.getComponentsOfType(TypeEnum.WORD);
+        List<TextComponent> sortedList = text.getComponentPartsListOfType(TypeEnum.WORD);
         Comparator<TextComponent> componentComparator = new ByWordLength();
         sortedList.sort(componentComparator);
 
@@ -39,7 +39,7 @@ public class ServiceLogicImpl implements ServiceLogic {
 
     @Override
     public List<TextComponent> sentencesSortedByNumberOfWords(TextComponent text) {
-        List<TextComponent> sortedList = text.getComponentsOfType(TypeEnum.SENTENCE);
+        List<TextComponent> sortedList = text.getComponentPartsListOfType(TypeEnum.SENTENCE);
         Comparator<TextComponent> componentComparator = new ByNumberOfWord();
         sortedList.sort(componentComparator);
 

@@ -10,8 +10,8 @@ public class ByNumberOfWord implements Comparator<TextComponent> {
     @Override
     public int compare(TextComponent o1, TextComponent o2) {
 
-        int firstWordNumber = o1.getComponentsOfType(TypeEnum.WORD).size();
-        int secondWordNumber = o2.getComponentsOfType(TypeEnum.WORD).size();
+        int firstWordNumber = o1.getComponentPartsListOfType(TypeEnum.WORD).size();
+        int secondWordNumber = o2.getComponentPartsListOfType(TypeEnum.WORD).size();
 
         return firstWordNumber - secondWordNumber;
     }

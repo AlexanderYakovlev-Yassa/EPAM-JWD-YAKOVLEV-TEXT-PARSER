@@ -13,27 +13,9 @@ public class RegularTextComponent implements TextComponent {
         this.components = new ArrayList<>();
     }
 
-
-    @Override
-    public List<TextComponent> getComponentList() {
-        return components;
-    }
-
     @Override
     public TypeEnum getType() {
         return type;
-    }
-
-    @Override
-    public String getStringRepresentation() {
-
-        StringBuilder sb = new StringBuilder();
-
-        for (TextComponent tc : components){
-            sb.append(tc.getStringRepresentation());
-        }
-
-        return sb.toString();
     }
 
     @Override
@@ -63,7 +45,7 @@ public class RegularTextComponent implements TextComponent {
     }
 
     @Override
-    public List<TextComponent> getComponentsOfType(TypeEnum type) {
+    public List<TextComponent> getComponentPartsListOfType(TypeEnum type) {
 
         List<TextComponent> componentList = new ArrayList<>();
 
@@ -71,9 +53,32 @@ public class RegularTextComponent implements TextComponent {
             if (tc.getType() == type) {
                 componentList.add(tc);
             }
-            componentList.addAll(tc.getComponentsOfType(type));
+            componentList.addAll(tc.getComponentPartsListOfType(type));
         }
 
         return componentList;
+    }
+
+    @Override
+    public List<TextComponent> getComponentPartsList(){
+
+        return this.components;
+    }
+
+    @Override
+    public TextComponent getComponentPart(int index) {
+        return this.components.get(index);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (TextComponent tc : components){
+            sb.append(tc.toString());
+        }
+
+        return sb.toString();
     }
 }

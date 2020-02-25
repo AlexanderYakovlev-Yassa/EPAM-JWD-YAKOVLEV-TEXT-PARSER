@@ -12,12 +12,7 @@ public class SymbolTextComponent implements TextComponent {
         this.symbol = symbol;
     }
 
-    @Override
-    public ArrayList<TextComponent> getComponentList() {
-        ArrayList<TextComponent> list = new ArrayList<>();
-        list.add(this);
-        return list;
-    }
+
 
     @Override
     public TypeEnum getType() {
@@ -25,7 +20,7 @@ public class SymbolTextComponent implements TextComponent {
     }
 
     @Override
-    public String getStringRepresentation() {
+    public String toString() {
         return String.valueOf(symbol);
     }
 
@@ -47,7 +42,7 @@ public class SymbolTextComponent implements TextComponent {
     }
 
     @Override
-    public List<TextComponent> getComponentsOfType(TypeEnum typeEnum) {
+    public List<TextComponent> getComponentPartsListOfType(TypeEnum typeEnum) {
 
         List<TextComponent> list = new ArrayList<>();
 
@@ -57,4 +52,16 @@ public class SymbolTextComponent implements TextComponent {
 
         return list;
     }
+
+    @Override
+    public List<TextComponent> getComponentPartsList() {
+        throw new UnsupportedOperationException("This type doesn't have component parts!!!");
+    }
+
+    @Override
+    public TextComponent getComponentPart(int index) {
+        throw new UnsupportedOperationException("This type doesn't have component parts!!!");
+    }
+
+
 }

@@ -34,25 +34,25 @@ public class Main {
         List<TextComponent> list = LOGIC.paragraphsSortedByNumberOfSentences(text);
 
         for (TextComponent tc : list){
-            System.out.println(tc.getStringRepresentation());
+            System.out.println(tc.toString());
         }
 
         System.out.println("Sentence with words sorted by length:\n");
 
-        TextComponent sentence = text.getComponentsOfType(TypeEnum.SENTENCE).get(3);
+        TextComponent sentence = text.getComponentPartsListOfType(TypeEnum.SENTENCE).get(3);
         list = LOGIC.wordsSortedByLength(sentence);
 
         for (TextComponent tc : list){
-            System.out.println(tc.getStringRepresentation());
+            System.out.println(tc.toString());
         }
 
         System.out.println("Paragraph with sentences sorted by the number of words:\n");
 
-        TextComponent paragraph = text.getComponentsOfType(TypeEnum.PARAGRAPH).get(1);
+        TextComponent paragraph = text.getComponentPartsListOfType(TypeEnum.PARAGRAPH).get(1);
         list = LOGIC.sentencesSortedByNumberOfWords(paragraph);
 
         for (TextComponent tc : list){
-            System.out.println(tc.getStringRepresentation());
+            System.out.println(tc.toString());
         }
     }
 }

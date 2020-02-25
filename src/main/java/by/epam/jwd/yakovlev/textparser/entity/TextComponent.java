@@ -5,9 +5,10 @@ import java.util.List;
 public interface TextComponent {
 
 
-    public List<TextComponent> getComponentList();
+    //public List<TextComponent> getComponentList();
     public TypeEnum getType();
-    public String getStringRepresentation();
     public String getComponentTreeView();
-    public List<TextComponent> getComponentsOfType(TypeEnum typeEnum);
+    public List<TextComponent> getComponentPartsListOfType(TypeEnum typeEnum);
+    public List<TextComponent> getComponentPartsList();
+    public TextComponent getComponentPart(int index);
 }

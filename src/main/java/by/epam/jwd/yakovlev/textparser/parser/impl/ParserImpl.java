@@ -43,7 +43,7 @@ public class ParserImpl implements Parser {
             component = new RegularTextComponent(type);
 
             List<String> rawStringsList = splitInto(nextType, rawText);
-            List<TextComponent> innerComponentsList = component.getComponentList();
+            List<TextComponent> innerComponentsList = component.getComponentPartsList();
 
 
             for (String rs : rawStringsList) {
@@ -56,6 +56,7 @@ public class ParserImpl implements Parser {
         return component;
     }
 
+    @Override
     public List<String> splitInto(TypeEnum type, String sourceSnippet) {
 
         List<String> newSnippetsList = new ArrayList<>();
