@@ -8,7 +8,7 @@ public enum TypeEnum {
     PARAGRAPH("[^\\n]+[\\n]"),
     SENTENCE("[\\w](([^\\.\\!\\?\\n])|([\\d]+[\\.][\\d]+))+[\\.\\!\\?]+"),
     TOKEN("[\\S]+"),
-    WORD("([\\w]+)"),
+    WORD("(([\\w&&[\\D]])+)"),
     SYMBOL("[\\w\\W]");
 
     Pattern pattern;
