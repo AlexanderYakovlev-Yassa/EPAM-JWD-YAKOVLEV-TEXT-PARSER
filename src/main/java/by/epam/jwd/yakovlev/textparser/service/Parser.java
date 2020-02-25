@@ -1,17 +1,12 @@
-package by.epam.jwd.yakovlev.textparser.parser.impl;
+package by.epam.jwd.yakovlev.textparser.service;
 
-import by.epam.jwd.yakovlev.textparser.parser.Parser;
-
-import by.epam.jwd.yakovlev.textparser.dao.DAOFactory;
-import by.epam.jwd.yakovlev.textparser.dao.DAOLogic;
-import by.epam.jwd.yakovlev.textparser.dao.exception.DAOLogicException;
 import by.epam.jwd.yakovlev.textparser.entity.RegularTextComponent;
-import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.SymbolTextComponent;
+import by.epam.jwd.yakovlev.textparser.entity.TextComponent;
 import by.epam.jwd.yakovlev.textparser.entity.TypeEnum;
-import by.epam.jwd.yakovlev.textparser.entity.nextypesolver.NextTypeSolver;
 import by.epam.jwd.yakovlev.textparser.service.impl.ServiceLogicImpl;
 import by.epam.jwd.yakovlev.textparser.validator.Validator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,45 +14,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-
-public class ParserImpl implements Parser {
+public class Parser {
 
     private static Validator VALIDATOR = new Validator();
     private static final Logger logger = LogManager.getLogger(ServiceLogicImpl.class);
 
     public static final int ZERO = 0;
 
-    @Override
-    public TextComponent buildComponentOf(TypeEnum type, String rawText, NextTypeSolver solver) {
+    private TypeEnum type;
+    private Parser nextParser;
+
+    public Parser(TypeEnum type, Parser nextParser) {
+        this.type = type;
+        this.nextParser = nextParser;
+    }
+
+    public Parser(TypeEnum type) {
+        this.type = type;
+        this.nextParser = null;
+    }
+
+    public TextComponent parse(String rawText){
+
+        if (rawText == null) {
+            throw new UnsupportedOperationException("Can't parse null!!!");
+        }
 
         TextComponent component;
-        if (type == TypeEnum.SYMBOL) {
-            component = new SymbolTextComponent(rawText.charAt(0));
+
+        if (type == TypeEnum.SYMBOL || rawText.length() == 1){
+
+            component = new SymbolTextComponent(rawText.charAt(ZERO));
             return component;
         }
 
-        TypeEnum nextType = solver.getNextType(type, rawText);
+        component = new RegularTextComponent(type);
+
+        if (nextParser == null){
+
+            for (char ch : rawText.toCharArray()) {
+                component.appendComponentPart(new SymbolTextComponent(ch));
+            }
+            return component;
+        }
 
         if (VALIDATOR.isConvertibleIntoType(type, rawText)) {
-
-            component = new RegularTextComponent(type);
-
-            List<String> rawStringsList = splitInto(nextType, rawText);
-            List<TextComponent> innerComponentsList = component.getComponentPartsList();
-
-
-            for (String rs : rawStringsList) {
-                innerComponentsList.add(buildComponentOf(nextType, rs, solver));
+            for (String s : splitInto(nextParser.type, rawText)) {
+                component.appendComponentPart(nextParser.parse(s));
             }
         } else {
-            component = buildComponentOf(nextType, rawText, solver);
+            nextParser.parse(rawText);
         }
 
         return component;
     }
 
-    @Override
-    public List<String> splitInto(TypeEnum type, String sourceSnippet) {
+    public TypeEnum getType() {
+        return type;
+    }
+
+    public Parser getNextParser() {
+        return nextParser;
+    }
+
+    private static List<String> splitInto(TypeEnum type, String sourceSnippet) {
 
         List<String> newSnippetsList = new ArrayList<>();
 
