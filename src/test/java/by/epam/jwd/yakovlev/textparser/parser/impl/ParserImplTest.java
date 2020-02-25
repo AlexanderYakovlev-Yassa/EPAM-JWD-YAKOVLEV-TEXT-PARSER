@@ -112,30 +112,6 @@ public class ParserImplTest {
         Assert.assertTrue(newSnippets.get(2).equals("forward"));
     }
 
-    @Test
-    public void splitIntoEquationPositiveTest() {
-
-        String snippet = "(~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78";
-
-        List<String> newTokens = LOGIC.splitInto(TypeEnum.TOKEN, snippet);
-
-        printTextComponent(newTokens);
-
-        snippet = newTokens.get(0);
-
-        List<String> newSnippets = LOGIC.splitInto(TypeEnum.EQUATION, snippet);
-
-        printTextComponent(newSnippets);
-
-        //List<String> newSnippets = LOGIC.splitInto(TypeEnum.EQUATION, snippet);
-
-        Assert.assertNotNull(newSnippets);
-
-        Assert.assertTrue(newSnippets.size() == 1);
-
-        Assert.assertTrue(newSnippets.get(0).equals("(~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78"));
-    }
-
     private void printTextComponent(List<String> newSnippets) {
 
         if (newSnippets.size() == 0) {

@@ -34,11 +34,4 @@ public class ValidatorTest {
 
         Assert.assertTrue(VALIDATOR.isConvertibleIntoType(TypeEnum.TEXT, TEXT));
     }
-
-    @Test
-    public void isConvertibleIntoEquationPositiveTest() {
-
-        String snippet = "(~71&(2&3|(3|(2&1>>2|2)&2)|10&2))|78";
-        Assert.assertTrue(VALIDATOR.isConvertibleIntoType(TypeEnum.EQUATION, snippet));
-    }
 }

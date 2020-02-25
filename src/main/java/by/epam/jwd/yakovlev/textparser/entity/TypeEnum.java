@@ -9,10 +9,6 @@ public enum TypeEnum {
     SENTENCE("[\\w](([^\\.\\!\\?\\n])|([\\d]+[\\.][\\d]+))+[\\.\\!\\?]+"),
     TOKEN("[\\S]+"),
     WORD("([\\w]+)"),
-    EQUATION("[\\d()|&+\\-\\*\\/<>^~]+"),
-    INTEGER_NUMBER ("[\\d]+"),
-    FLOAT_POINT_NUMBER("[\\d]+[\\.]?[\\d]*"),
-    MATH_SIGN("[()|&+\\-\\*\\/<>^~]"),
     SYMBOL("[\\w\\W]");
 
     Pattern pattern;
