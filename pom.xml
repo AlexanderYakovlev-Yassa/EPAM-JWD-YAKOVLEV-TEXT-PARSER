@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>4.13.1</junit.version>
 		<annotation.version>17.0.0</annotation.version>
-		<log4j2.version>2.11.2</log4j2.version>
+		<log4j2.version>2.16.0</log4j2.version>
 		<maven-compiler-plugin.version>1.8</maven-compiler-plugin.version>
 	</properties>
 
